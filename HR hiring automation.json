@@ -1,0 +1,586 @@
+{
+  "name": "HR hiring automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1136,
+        256
+      ],
+      "id": "264e22bc-6048-463a-805c-83df5d66ee21",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "juU1VXDx0RUVPMSA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "attachment_0",
+        "name": "={{ $json.from.value[0].name }}'s Resume",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1Ce6dZteHpXDErdaWThHw9y8hzxKqtXd_",
+          "mode": "list",
+          "cachedResultName": "Resumes",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1Ce6dZteHpXDErdaWThHw9y8hzxKqtXd_"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -912,
+        256
+      ],
+      "id": "5d12963a-a382-4fd4-933e-0c7c6c824eda",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "wjWzHa9Yh3t5EZ8k",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ $('Gmail Trigger').item.json.text }}{{ $('Gmail Trigger').item.json.from.value[0].address }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "name",
+              "description": "this is the full name of the candidate",
+              "required": true
+            },
+            {
+              "name": "email",
+              "description": "This is the candidates email",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        256
+      ],
+      "id": "facb5b67-8acf-4862-837c-e3f3688896f0",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        480
+      ],
+      "id": "b460a023-a016-46b5-b171-725391e24eb2",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "dT4fXnV2DOew0cxU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Gmail Trigger').item.json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a strict email screening assistant. Your job is to read the body of an email and decide if the candidate matches based on keyword presence.\n\nRULES:\n- Look for these keywords: \"Mid-level\", \"Python\", \"GenAI\".\n- The match is case-insensitive. Treat \"mid-level\", \"Mid Level\", \"MID-LEVEL\" as the same.\n- If at least TWO of these keywords appear anywhere in the email body, return: {\"status\": \"match\"}.\n- If fewer than two appear, return: {\"status\": \"not a match\"}.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -336,
+        256
+      ],
+      "id": "e3ffc662-4c32-477d-b175-84789d6e0db4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"title\": \"CandidateMatchResult\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": {\n      \"type\": \"string\",\n      \"enum\": [\"match\", \"not a match\"],\n      \"description\": \"Returns 'match' if at least two of the keywords (Mid-level, Python, GenAI) are present, otherwise 'not a match'.\"\n    }\n  },\n  \"required\": [\"status\"],\n  \"additionalProperties\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -272,
+        480
+      ],
+      "id": "cf58170a-2a22-433a-9f72-27784310e940",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5800e32d-7897-4a2b-9670-e32d26cace20",
+              "leftValue": "={{ $json.output.status }}",
+              "rightValue": "match",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        16,
+        256
+      ],
+      "id": "dfe628c7-502d-42ec-9697-0ba6f1ce3f45",
+      "name": "Candidate Match"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15f7lNqtGBYc09LlT0uZSXeg9ZznbH6ycCiQoeWgT5nM",
+          "mode": "list",
+          "cachedResultName": "Candidate Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15f7lNqtGBYc09LlT0uZSXeg9ZznbH6ycCiQoeWgT5nM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/118brBIpBSa0oZZ1zqtjB9LDo_EmvryFwsYfn_dEs3Ig/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Information Extractor').item.json.output.name }}",
+            "Email": "={{ $('Information Extractor').item.json.output.email }}",
+            "Application Date": "={{ $now.format('yyyy-MM-dd') }}",
+            "Status": "Pending Review",
+            "Resume": "={{ $('Upload file').item.json.webViewLink }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Application Date",
+              "displayName": "Application Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Resume",
+              "displayName": "Resume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        160
+      ],
+      "id": "767b6505-4afc-4278-99a8-7aa1254f8b62",
+      "name": "Add Qualified Candidates",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jMEc9y8zQrKWthdm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1V8HiJgOAfYfpFi8YO-QmTj4iIXbeeWHyI5vg99JmR7o",
+          "mode": "list",
+          "cachedResultName": "Rejected Applications",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1V8HiJgOAfYfpFi8YO-QmTj4iIXbeeWHyI5vg99JmR7o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nWShuADA57X4SIGUouEaZyyhRjRd9loDB0GEXkwg0nk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Information Extractor').item.json.output.name }}",
+            "Email": "={{ $('Information Extractor').item.json.output.email }}",
+            "Application Date": "={{ $now.format('yyyy-MM-dd') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Application Date",
+              "displayName": "Application Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        352
+      ],
+      "id": "1b7a8df1-1b1f-4379-ae29-2c59142406cd",
+      "name": "Add Unqualified Candidates",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jMEc9y8zQrKWthdm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Invitation to book interview call",
+        "message": "=<!doctype html>\n<html>\n  <body>\n        <p>Thanks for applying to Seismic Consulting Group. We reviewed your submission and your background looks like a potential fit.</p>\n\n        <p>Please book a 30-minute screening call so we can talk about the role and next steps.</p>\n\n        <p>\n          <a class=\"button primary\" href=\"https://calendly.com/your-link\" target=\"_blank\" rel=\"noopener noreferrer\">\n            Book a 30-minute screening\n          </a>\n        </p>\n\n        <p class=\"muted\">If the link does not work, copy and paste this into your browser: https://calendly.com/your-link</p>\n\n        <p>We look forward to speaking with you.</p>\n\n        <p>Best,<br />Seismic Hiring Team</p>\n  </body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        160
+      ],
+      "id": "2bd59c42-4eaa-4159-9fc8-79d70621f72c",
+      "name": "Send an invitation email",
+      "webhookId": "47255fd6-4be0-4519-b4b1-46da0925c463",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "juU1VXDx0RUVPMSA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Application Status",
+        "message": "=<!doctype html>\n<html>\n  <body>\n        <p>Hi {{$json.Name || 'there'}},</p>\n\n        <p>Thank you for taking the time to apply to Seismic Consulting Group. We appreciate your interest.</p>\n\n        <p>After an initial review, we will not be moving forward with your application for this role. We encourage you to check our careers page for future opportunities that match your experience.</p>\n\n        <p>Thanks again for applying. We wish you the best in your job search.</p>\n\n        <p>Kind regards,<br />Seismic Hiring Team</p>\n    \n  </body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        352
+      ],
+      "id": "f9c74b1b-e44c-44de-9bed-194afee4cabf",
+      "name": "Send a polite rejection email",
+      "webhookId": "47255fd6-4be0-4519-b4b1-46da0925c463",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "juU1VXDx0RUVPMSA",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Gmail Trigger\nThis checks for an incoming email every minute and uploads the attached document to google drive. ",
+        "height": 400,
+        "width": 384,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1168,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "95883a0a-b36d-4901-a093-45ce85f8e0b7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Smart Agent \nThis block uses an LLM to check if user meets the required number of keywords. If yes, it routes to the Qulified candidates and sends an invitation email, it routes to the unqualified candidate path and sends a rejection email.",
+        "height": 608,
+        "width": 480,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        16
+      ],
+      "id": "dc7f13c5-eabf-4ab2-892f-726fa3ba28a9",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Email Sending\nSends Email based on the status of the applicant.",
+        "height": 816,
+        "width": 480,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -128
+      ],
+      "id": "1e32394f-2b06-40ed-98c4-98767e515cf2",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Extract Details\nExtracts user name and email using an LLM so it can be saved in the sheets later on.",
+        "height": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        80
+      ],
+      "id": "f82ee9ae-e919-49d7-80ab-9a7f1609f0d7",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Candidate Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidate Match": {
+      "main": [
+        [
+          {
+            "node": "Add Qualified Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Unqualified Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Qualified Candidates": {
+      "main": [
+        [
+          {
+            "node": "Send an invitation email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Unqualified Candidates": {
+      "main": [
+        [
+          {
+            "node": "Send a polite rejection email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fd3e14f7-250a-490a-a8cb-b21e9b334928",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4779faa8ad75e367ff94f10308469f6c1e77e8fa12a6caa76476e30777b97eac"
+  },
+  "id": "K6FJHkZiw1cfyD3V",
+  "tags": []
+}
