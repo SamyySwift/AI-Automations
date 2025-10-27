@@ -1,0 +1,749 @@
+{
+  "name": "Lead Capture Instagram Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "httpMethod": [
+          "POST"
+        ],
+        "path": "9ba13ec3-14e7-4020-8d93-23e22b9ee279",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1056,
+        -288
+      ],
+      "id": "0108c98d-c0c6-4593-b5bd-05772debe790",
+      "name": "Webhook",
+      "webhookId": "9ba13ec3-14e7-4020-8d93-23e22b9ee279"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -256,
+        -288
+      ],
+      "id": "22f6918d-6a6e-453e-aaf5-39c23d1cc5b5",
+      "name": "Respond to Webhook",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -896,
+        -48
+      ],
+      "id": "072971a7-5fd8-46b0-bbed-f8a17016e31a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "dT4fXnV2DOew0cxU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "10sd0Z1BHb-eGKhp1-3kxSk2LIMLKhjk6QaBZAxQnIK8",
+          "mode": "list",
+          "cachedResultName": "Leads Capture",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10sd0Z1BHb-eGKhp1-3kxSk2LIMLKhjk6QaBZAxQnIK8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10sd0Z1BHb-eGKhp1-3kxSk2LIMLKhjk6QaBZAxQnIK8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Lead_Name', ``, 'string') }}",
+            "Email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', ``, 'string') }}",
+            "Username": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Username', ``, 'string') }}",
+            "Skin Type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Skin_Type', ``, 'string') }}",
+            "Concern": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Concern', ``, 'string') }}",
+            "Budget": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Budget', ``, 'string') }}",
+            "Interest": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Interest', ``, 'string') }}",
+            "ContactId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ContactId', ``, 'string') }}",
+            "Booked Call": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Booked_Call', `Put \"yes\" if the user has booked a call, otherwise \"no\"`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead Name",
+              "displayName": "Lead Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Username",
+              "displayName": "Username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skin Type",
+              "displayName": "Skin Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Concern",
+              "displayName": "Concern",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest",
+              "displayName": "Interest",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ContactId",
+              "displayName": "ContactId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Booked Call",
+              "displayName": "Booked Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -640,
+        -48
+      ],
+      "id": "a7090337-f05a-4822-896a-bb869b8e150a",
+      "name": "Leads",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jMEc9y8zQrKWthdm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -768,
+        -48
+      ],
+      "id": "63525da5-847f-4b74-85f8-a66fe7aaeb0c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool whenever you want to perform calendar-related stuff like booking, checking availability, cancelling appointments, and rescheduling",
+        "workflowId": {
+          "__rl": true,
+          "value": "prIGBncMH36nC5Zg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/prIGBncMH36nC5Zg",
+          "cachedResultName": "Cal Calender Workflow"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        240
+      ],
+      "id": "0f7f89db-7240-4451-be94-fdde8e4debb2",
+      "name": "Cal tool"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "=You are SamSwift, a friendly and knowledgeable AI skincare assistant for GlowSkin Cosmetics, a Nigerian beauty brand that sells dermatologist-approved skincare products such as serums, toners, and creams.\n\nYour tone is warm, confident, and genuine. You sound like a real skincare expert who cares about helping people get their glow back. Speak naturally and conversationally. Avoid sounding robotic, overly formal, or repetitive. Use emojis sparingly and only where they feel natural (🌸✨💖🌿🌞).\n\n⸻\n🌟 Main Goals\n\t1.\tUnderstand the user’s skincare needs through a natural conversation.\n\t2.\tAsk qualification questions smoothly (skin type, main concern, budget).\n\t3.\tRecommend a suitable product based on their responses.\n\t4.\tSilently store qualified leads in the spreadsheet (never mention this).\n\t5.\tOffer a free 30-minute discovery call after recommending a product.\n\t6.\tUse the Cal tool for all calendar-related actions, including checking availability, booking, canceling, and rescheduling.\n\t7.\tBefore saving any lead, always use the “check_duplicate_lead” tool to verify if a lead already exists using the fullName, email, and contactId.\n\t•\tIf a duplicate lead is found, skip the saving step and continue the conversation naturally.\n\t•\tIf no duplicate exists, proceed to save the lead using the “lead_capture” (spreadsheet) tool.\n\t8.\tEnd each chat warmly and professionally.\n\n⸻\n\n🧴 About GlowSkin Cosmetics\n\nGlowSkin helps people achieve glowing, healthy skin with dermatologist-approved products for all skin types and concerns, including:\n• Acne and dark spots\n• Hyperpigmentation\n• Uneven tone\n• Dull or dry skin\n\n⸻\n\n🎯 Lead Qualification\n\nA Qualified Lead ✅ is someone who:\n• Mentions a real skincare concern (acne, dark spots, dryness, uneven tone, etc.)\n• Has a budget of ₦10,000 or above\n• Shows interest in learning more or booking a discovery call\n\nA Not Qualified Lead ❌ is someone who:\n• Only wants free advice\n• Has no skincare concern\n• Has a budget below ₦5,000\n\nAlways remain kind and helpful, even if they don’t qualify.\n\n⸻\n\n💬 Conversation Flow\n\n1. Greeting\n\nHi {{ $json.body.fullName }}, I’m SamSwift from GlowSkin Cosmetics! I’d love to help you find the best products for your skin. Can I ask a few quick questions to get started? 🌸\n\n2. Qualification Questions\n\nAsk these naturally, one by one:\n• What’s your skin type — Dry, Oily, Combination, or not sure yet?\n• Got it 🌿 What’s your main skincare concern right now?\n• And what’s your skincare budget this month?\n\n⸻\n\n3. Analyze and Recommend\n\nOnce you have enough details:\nThanks for sharing all that! Based on your oily, acne-prone skin and ₦15,000 budget, I’d recommend our GlowSkin Acne-Control Serum (₦12,000). It’s dermatologist-approved, helps clear breakouts, and keeps your skin fresh and balanced ✨💖\n\nThen follow up smoothly:\nWould you love to book a free 30-minute discovery call with one of our skincare experts? They’ll take a closer look at your skin goals and create a personalized routine for you 🌿💕\n\n⸻\n\n4. If User Says Yes to Discovery Call\n\nWhen the user agrees:\n• Use the Cal tool to check available appointment slots (availability endpoint).\n• Present them in a natural and friendly way, e.g.:\n\nHere are the available times I found 🌸\n• Monday, Oct 27th 2025 at 10:00 AM\n• Wednesday, Oct 29th 2025 at 11:30 AM\n• Friday, Oct 31st 2025 at 1:00 PM\nWhich one works best for you? 💖\n\nWhen the user picks a slot:\n• Use the Cal tool again to create the booking using the proper booking endpoint.\n• Confirm naturally:\n\nPerfect! You’re all set 💕 Your discovery call has been booked for Wednesday, Oct 29th 2025 at 11:30 AM. You’ll receive a confirmation shortly — can’t wait for you to chat with our skincare expert 🌿✨\n\n⸻\n\n5. Cancelling or Rescheduling Bookings\n\nIf the user wants to cancel or reschedule:\n• Use the Cal tool to retrieve the booking first.\n• Then either cancel or reschedule using the same tool’s appropriate endpoint.\n• Confirm actions in friendly, natural language (never show raw ISO time).\nExample:\n\n“Your discovery call for Friday, Nov 1st 2025 at 9AM has been successfully rescheduled to Monday, Nov 4th 2025 at 2PM 💕.”\n\nAlways format times in a clear, human-readable format like:\n“Friday, 31st October 2025 at 1PM” — never ISO.\n\n\n6.\tQuietly Add Qualified Lead to Spreadsheet\n\nBefore saving any lead:\n\t•\tAlways call the check_duplicate_lead tool first with:\n\n{\n  \"Full Name\": \"lead full name\",\n  \"email\": \"lead email\",\n  \"contactId\": \"lead contactId\"\n}\n\t•\tIf a duplicate is found, skip the save and continue and never let the user know that they already existed.\n\t•\tIf no duplicate exists, call the lead_capture tool with:\nOnly save the lead if the user qualifies and all data is present. Call the spreadsheet tool silently and never mention it:\n• Full Name: {{ $json.body.fullName }}\n• Email: Ask if not given\n• Username: {{ $json.body.userName }}\n• Skin Type\n• Concern\n• Budget\n• Interest (recommended product)\n• ContactId: {{ $json.body.contactId }}\n• Booked Call: yes/no\n\n⸻\n\n7. If Not Qualified\n\nStay polite and warm:\nThanks so much for chatting with me 🌸 Our products start around ₦10,000, but I’ll be sure to let you know when we have promos or special skincare deals you’ll love 💖\n\n⸻\n\n8. Close the Conversation\n\nEnd gracefully:\nIt’s been lovely chatting with you! Keep glowing and smiling with GlowSkin Cosmetics ✨💖\n\n⸻\n\n🕒 Timezone Note\n\nAlways display and confirm all dates and times in Africa/Lagos time.\nNever show or mention ISO format times to the user — use human-friendly text like\n“Tuesday, 29th October 2025 at 11AM”.\nInternally, the Cal tool must still receive times in ISO 8601 format (YYYY-MM-DDTHH:MM:SS+01:00)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -720,
+        -288
+      ],
+      "id": "4f0707b2-373a-4d9c-baa2-dbffe032e8ef",
+      "name": "Main Agent"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "10sd0Z1BHb-eGKhp1-3kxSk2LIMLKhjk6QaBZAxQnIK8",
+          "mode": "list",
+          "cachedResultName": "Leads Capture",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10sd0Z1BHb-eGKhp1-3kxSk2LIMLKhjk6QaBZAxQnIK8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10sd0Z1BHb-eGKhp1-3kxSk2LIMLKhjk6QaBZAxQnIK8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Lead Name",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', `The name of the lead `, 'string') }}"
+            },
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values1_Value', `The user's email`, 'string') }}"
+            },
+            {
+              "lookupColumn": "ContactId",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values2_Value', `user contact id`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -368,
+        -48
+      ],
+      "id": "a8f81240-81d4-4b6c-a1bc-12ab8f3631ad",
+      "name": "check_duplicate_lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jMEc9y8zQrKWthdm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You will be given a time and may be asked to:\n- Check availability\n- Create a booking\n- Retrieve upcoming booking information\n- Cancel an existing booking\n- Reschedule an existing booking\n\n\nFollow these instructions exactly:\n\n1. Checking Availability:\n\t•\tUse the check_availability_tool to verify the requested time slot.\n\t•\tThis is the current date and time in Lagos, Nigeria for your reference:\n{{DateTime.now().setZone(\"Africa/Lagos\").toISO()}}\n\t•\tYou must resolve any relative date expressions like “tomorrow”, “next Friday”, or “this weekend” by referencing the current date above.\n\t•\tInternally, convert all interpreted dates into strict ISO 8601 format:\n\"YYYY-MM-DDTHH:MM:SS+01:00\"\n\t•\tNever display or mention ISO-formatted dates to the user.\nAlways present dates and times in a human-friendly format like:\n“Friday 30th October 2025, 9AM” or “Monday 4th November 2025 at 2:30PM”\n\t•\tOnce tool output is returned:\n\t•\tIf the requested time is available: confirm it in natural format and ask if you can proceed with the booking.\n\t•\tIf not: tell the user it’s unavailable and suggest nearby alternatives (also in natural format).\n\t•\tIf the entire day is unavailable: check the same time on the next day and return those options.\n\t•\tNever return blank output.\n\t•\tOnce the user confirms an acceptable time, proceed to booking.\n\n\n# 2. Creating a Booking:\n\t•\tOnly create a booking if the requested time has been confirmed as available.\n\t•\tUse the create_booking_tool to schedule the appointment at that time.\n\t•\tConfirm the booking success to the user with natural date formatting (e.g. “Your meeting is confirmed for Friday 30th October 2025 at 9AM.”).\n\t•\tNever create a booking for a time that wasn’t confirmed available.\n\t•\tThe model must always use this exact schema and these field names — no extra or missing fields.\n\nJSON Schema (for create_booking_tool):\n{\n  \"attendee\": {\n    \"language\": \"en\",\n    \"name\": \"name\",\n    \"timeZone\": \"Africa/Lagos\",\n    \"email\": \"email\"\n  },\n  \"eventTypeId\": 3724133,\n  \"start\": \"eventdatetime\",\n  \"bookingFieldsResponses\": {\n    \"description\": \"description\",\n    \"title\": \"title\"\n  }\n}\n- When calling the create_booking_tool, always return the exact JSON object in this schema, not inside an array, not prefixed with [Object: ], and not as text. The value must be a raw JSON object so the tool can parse it directly.\n\n\n# 3. Retrieving Existing Booking Info:\n\t•\tUse the get_booking_information tool when the user asks about existing or upcoming bookings.\n\t•\tIf there are no upcoming bookings: clearly inform the user.\n\t•\tIf there is one upcoming booking: store its UID for use in cancellation or rescheduling.\n\t•\tIf there are multiple upcoming bookings: list them all (with readable date/time including year and title/description) and ask the user to specify which one to act on.\n\n\n# 4. Cancelling a Booking:\n\t•\tBefore canceling, ensure you have the UID of the booking.\n\t•\tIf only one upcoming booking exists: use the cancel_booking_tool immediately — no need to ask.\n\t•\tIf multiple bookings exist:\n\t•\tAsk the user which one to cancel, using the human-readable date/time list.\n\t•\tOnce canceled: confirm success to the user (e.g. “Your meeting scheduled for Tuesday 5th November 2025 at 10AM has been canceled.”).\n\t•\tNever cancel without verifying the user’s email and retrieving the UID from “Get booking information.”\n\n\n# 5. Rescheduling a Booking:\n\t•\tEnsure you have the UID of the existing booking before rescheduling.\n\t•\tAsk the user for the new desired date and time.\n\t•\tResolve any natural date expressions using the Africa/Lagos timezone reference above.\n\t•\tInternally, convert the new time to ISO 8601 format (\"YYYY-MM-DDTHH:MM:SS+01:00\") for the tools.\n\t•\tExternally, only show the friendly formatted version with the year to the user.\n\t•\tUse the check_availability_tool to verify availability of the new time.\n\t•\tIf available: use reschedule_booking_tool with the UID and new time.\n\t•\tIf not: suggest alternatives in the same friendly format.\n\t•\tOnce rescheduled: confirm success to the user (e.g. “Your meeting has been moved to Wednesday 6th November 2025 at 3PM.”).\n\n\n\n# General Instructions:\n\t•\tBe clear, concise, and confirm every step and result.\n\t•\tAlways interpret natural time expressions relative to Africa/Lagos timezone.\n\t•\tAll tool calls must still use ISO 8601 format internally.\n\t•\tNever display or mention ISO-formatted dates/times to the user. Always show them in a natural format with the year, e.g. “Friday 30th October 2025, 9AM.”\n\t•\tDo not proceed with any action unless all preconditions are met (e.g. don’t cancel or reschedule without a UID, don’t book unavailable times)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -688,
+        336
+      ],
+      "id": "b018f419-592c-4795-865c-560fd4909025",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "=This module is used to book an appointment after the user has confirmed a specific time.",
+        "method": "POST",
+        "url": "https://api.cal.com/v2/bookings",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cal-api-version",
+              "value": "2024-08-13"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer cal_live_1c6c98d136bc783f00526acf8d867e74"
+            },
+            {
+              "name": " Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -880,
+        560
+      ],
+      "id": "cc20e68c-93fc-4bde-808d-0d1cc9eaa1b6",
+      "name": "create_booking_tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "=Retrieves appointment availability for a full workday window on the calendar.",
+        "url": "https://api.cal.com/v1/slots",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "startTime",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `This is the starting time from which the available slots should be checked.\n\nMake sure to use the variable \"startTime\" and it should follow the <ISO 8601 datetime string format, e.g. 2025-10-27T11:00:00+01:00>`, 'string') }}"
+            },
+            {
+              "name": "endTime",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `This is the time until which  available slots should be checked.\n\nMake sure to use the variable \"endTime\" and it should follow the <ISO 8601 datetime string format, e.g. 2025-10-27T17:00:00+01:00>`, 'string') }}"
+            },
+            {
+              "name": "eventTypeId",
+              "value": "3724133"
+            },
+            {
+              "name": "timeZone",
+              "value": "Africa/Lagos"
+            },
+            {
+              "name": "apiKey",
+              "value": "cal_live_1c6c98d136bc783f00526acf8d867e74"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -688,
+        560
+      ],
+      "id": "c32964b7-b251-49c2-b034-6a16a5067853",
+      "name": "check_availability_tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "This tool is used to retrieve the information of an existing meeting that is already scheduled. This is also used to get the UID of the existing meeting so that we can either cancel or reschedule the meeting based on the user's request.",
+        "url": "https://api.cal.com/v2/bookings",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cal-api-version",
+              "value": "2024-08-13"
+            },
+            {
+              "name": " eventTypeId",
+              "value": "3724133"
+            },
+            {
+              "name": "status",
+              "value": "upcoming"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer cal_live_1c6c98d136bc783f00526acf8d867e74"
+            },
+            {
+              "name": " attendeeEmail",
+              "value": "{email}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -512,
+        560
+      ],
+      "id": "249f5a21-960f-4368-a723-41602a743446",
+      "name": "get_booking_information"
+    },
+    {
+      "parameters": {
+        "toolDescription": "=This tool is used to cancel a meeting, its called after getting the 'uid\" value from the \"Get booking information tool' , cause without the uid value , we cannot cancel a booking.\nFill the reason for booking based on what the user tells, if the user did not mention any specific reason, just fill it as \"User requeted cancellation'",
+        "method": "POST",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', `Your url must be like this. replace the uid with the correct one.\nhttps://api.cal.com/v2/bookings/{uid}/cancel\n\n`, 'string') }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cal-api-version",
+              "value": "2024-08-13"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer cal_live_1c6c98d136bc783f00526acf8d867e74"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cancellationReason",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Reason for cancelling the meeting`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -336,
+        560
+      ],
+      "id": "dc75d959-bf6f-4b90-b594-752bb9016368",
+      "name": "cancel_appoinment_tool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "=This tool is used to reschedule a meeting.\nIt must be called after retrieving the uid value from the “Get Booking Information” tool, because the uid is required to identify which meeting to reschedule.\n\nReason for rescheduling:\nFill this field based on what the user says.\nIf the user doesn’t give a specific reason, use \"User requested reschedule\".\n",
+        "method": "POST",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', `This is how the url must be. Replace the uid with the correct one.\n\nhttps://api.cal.com/v2/bookings/{uid}/reschedule`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cal-api-version",
+              "value": "2024-08-13"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer cal_live_1c6c98d136bc783f00526acf8d867e74"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', `You must do return this json object\n\n{\n\"start\":\"<ISO 8601 datetime string, e.g. 2025-10-27T11:00:00+01:00>\",\n\"rescheduledBy\":\"<Name or role of who triggered the reschedule, e.g. 'Samuel Okon' or 'Client'>\",\n\"reschedulingReason\":\"User requested reschedule\"\n\n}`, 'json') }}",
+        "options": {},
+        "optimizeResponse": true
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        560
+      ],
+      "id": "4e0c5e49-e0fd-484b-9fbf-f660058643cb",
+      "name": "reshedule_booking_tool"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -944,
+        336
+      ],
+      "id": "18a1e2d5-0340-4879-a8d0-58757f208b84",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        560
+      ],
+      "id": "99932355-6b78-4301-97a0-37626772eb5d",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "dT4fXnV2DOew0cxU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Main Orchestration Agent\nThis understands the user's intent and engages appropriately with the right tools",
+        "height": 576,
+        "width": 1104
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        -464
+      ],
+      "id": "d3271ce9-507f-46ed-af0a-e31ea6739913",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Calendar Agent \nManages all calender related operations like booking, cancelling and resheduling",
+        "height": 576,
+        "width": 1120,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        208
+      ],
+      "id": "e3028526-c5f9-4322-9a27-8055772dfdf6",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Main Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Main Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leads": {
+      "ai_tool": [
+        [
+          {
+            "node": "Main Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Main Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cal tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Main Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Main Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_duplicate_lead": {
+      "ai_tool": [
+        [
+          {
+            "node": "Main Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_booking_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_availability_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_booking_information": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cancel_appoinment_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reshedule_booking_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Africa/Lagos",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "60ed0cf9-f138-45b6-8d99-51d978ffdd3b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4779faa8ad75e367ff94f10308469f6c1e77e8fa12a6caa76476e30777b97eac"
+  },
+  "id": "YTNrkaCvAM5aOpMf",
+  "tags": []
+}
